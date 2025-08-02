@@ -3,9 +3,9 @@
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import Menu from "@/components/ui/menu";
+// import Menu from "@/app/components/ui/menu";
 import Link from "next/link";
-import Hero from "@/components/ui/hero"; // make sure this exists or update the path
+// import Hero from "@/app/components/ui/hero"; // make sure this exists or update the path
 
 function Header() {
   const { theme, setTheme } = useTheme();
@@ -76,7 +76,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <Hero />
+      {/* <Hero /> */}
     </>
   );
 }
