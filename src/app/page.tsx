@@ -2,10 +2,10 @@
 
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
-import { Button } from "../../components/ui/button";
-import Menu from "./menu";
+import { Button } from "@/components/ui/button";
+import Menu from "@/components/ui/menu";
 import Link from "next/link";
-import Hero from "./hero"; // make sure this exists or update the path
+import Hero from "@/components/ui/hero"; // make sure this exists or update the path
 
 function Header() {
   const { theme, setTheme } = useTheme();
@@ -22,7 +22,9 @@ function Header() {
       <div className="flex items-center justify-start h-full px-0 relative">
         <div className="h-full flex justify-between items-center z-50 bg-white/60 dark:bg-black/60 backdrop-blur-md shadow-lg dark:shadow-sm dark:shadow-white/10 rounded-[2rem] w-full px-4 sm:px-6">
           <Link href="/">
-            <h1 className="font-bold text-3xl sm:text-4xl lg:text-5xl py-4">Nannuru</h1>
+            <h1 className="font-bold text-3xl sm:text-4xl lg:text-5xl py-4">
+              Nannuru
+            </h1>
           </Link>
           <div className="flex items-center gap-2">
             <Button
