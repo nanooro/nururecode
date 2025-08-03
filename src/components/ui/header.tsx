@@ -20,7 +20,7 @@ export default function Header({ setTheme, theme }: { setTheme: (theme: string) 
         <div className="h-full flex justify-between items-center z-50 bg-white/60 dark:bg-black/60 backdrop-blur-md shadow-lg dark:shadow-sm dark:shadow-white/10 rounded-lg w-full px-4 sm:px-6">
           <Link href="/">
             <h1 className="font-bold text-3xl sm:text-4xl lg:text-5xl py-4">
-              Nannuru
+              Nannuru<span className="text-lg text-gray-500 dark:text-gray-400">.com</span>
             </h1>
           </Link>
           <div className="flex items-center gap-2">
