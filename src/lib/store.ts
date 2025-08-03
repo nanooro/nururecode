@@ -14,7 +14,7 @@ type Article = {
   imgUrl: string;
   created_at: string;
   user_id: string;
-  view_counter: number;
+  view_count: number;
   author?: Profile; // Optional author profile
 };
 
@@ -33,7 +33,8 @@ export const useArticleStore = create<ArticleStore>((set, get) => ({
     try {
       const { data, error } = await supabase
         .from('Nannuru_articles_table')
-        .select('*');
+        .select('*')
+        .order('view_count', { ascending: false });
 
       if (error) throw error;
 

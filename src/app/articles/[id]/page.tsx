@@ -62,5 +62,27 @@ export default async function Page(props: any) {
     redirect('/articles');
   }
 
+  const incrementView = async (articleId: string) => {
+    const { data, error } = await supabase
+      .from("Nannuru_articles_table")
+      .select("view_count")
+      .eq("id", articleId)
+      .single();
+
+    if (error) {
+      console.error("Error fetching view count:", error);
+      return;
+    }
+
+    const newViewCount = (data?.view_count || 0) + 1;
+
+    await supabase
+      .from("Nannuru_articles_table")
+      .update({ view_count: newViewCount })
+      .eq("id", articleId);
+  };
+
+  await incrementView(params.id);
+
   return <ArticleRead id={params.id} more={moreArticles || []} article={article} />;
 }

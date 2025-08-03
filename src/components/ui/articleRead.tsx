@@ -12,6 +12,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import CanvasDisplay from "@/components/ui/canvasDisplay";
 
 type Profile = {
   id: string;
@@ -181,8 +182,22 @@ export default function ArticleRead({ id, more, article: initialArticle }: { id:
           height={400}
           className="my-4 w-full rounded"
         />
-        <p>{article.subHeading}</p>
-        <p>{article.content}</p>
+        {(() => {
+          try {
+            const canvasData = JSON.parse(article.subHeading);
+            if (canvasData && canvasData.elements) {
+              return <CanvasDisplay data={canvasData} />;
+            }
+          } catch (error) {
+            // Not a JSON, so render as plain text
+          }
+          return (
+            <>
+              <p>{article.subHeading}</p>
+              <p>{article.content}</p>
+            </>
+          );
+        })()}
 
         <div className="flex justify-center items-center mt-12">
           <p>End</p>
