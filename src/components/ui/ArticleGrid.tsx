@@ -21,6 +21,8 @@ const SkeletonCard = () => (
 );
 
 export default function ArticleGrid({ articles }: { articles: any[] }) {
+  console.log("Articles received in ArticleGrid:", articles);
+
   if (!articles || articles.length === 0) {
     return (
       <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-2 justify-items-center">
