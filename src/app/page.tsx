@@ -13,18 +13,28 @@ import Footer from "@/components/ui/footer";
 
 export default function Home() {
   const { setTheme, theme } = useTheme();
-  const articles = useArticleStore((s) => s.articles);
-  const fetchArticles = useArticleStore((s) => s.fetchArticles);
-  const [loading, setLoading] = useState(true);
   const articlesRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const load = async () => {
-      if (articles.length === 0) await fetchArticles();
-      setLoading(false);
-    };
-    load();
-  }, []);
+  const articles = [
+    {
+      id: 1,
+      Heading: "ಒಂದೆ ವಧುವನ್ನು ವರಿಸಿದ ಸಹೋದರರು",
+      subHeading: "ಹಿಮಾಚಲ ಪ್ರದೇಶದ ಒಂದು ಬುಡಕಟ್ಟು ಜನಾಂಗದಲ್ಲಿ ಇಂದಿಗೂ ಈ ವಿಚಿತ್ರ ಪದ್ಧತಿ ಜಾರಿಯಲ್ಲಿದೆ.",
+      imgUrl: "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      created_at: "2025-07-21T12:00:00Z",
+      user_id: "1",
+      view_count: 100,
+    },
+    {
+      id: 2,
+      Heading: "ನೀರು ಕುಡಿಸಲು ಹೋದ ಕುರಿಗಾಹಿಗಳ ಮೇಲೆ ಹಲ್ಲೆ...?",
+      subHeading: "ಕೊಪ್ಪಳದಲ್ಲಿ ಜಾನುವಾರುಗಳಿಗೆ ನೀರು ಕುಡಿಸಲು ಹೋದ ಕುರಿಗಾಹಿಗಳ ಮೇಲೆ ಕಂಪನಿಯ ಸಿಬ್ಬಂದಿ ಹಲ್ಲೆ ನಡೆಸಿದ್ದಾರೆ ಎಂದು ಆರೋಪಿಸಲಾಗಿದೆ.",
+      imgUrl: "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      created_at: "2025-07-26T12:00:00Z",
+      user_id: "2",
+      view_count: 150,
+    },
+  ];
 
   return (
     <>
@@ -48,42 +58,22 @@ export default function Home() {
               },
             }}
           >
-            {loading
-              ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
-              : articles.map((article) => (
-                  <motion.div
-                    key={article.id}
-                    variants={{
-                      hidden: { opacity: 0, y: 20 },
-                      visible: { opacity: 1, y: 0 },
-                    }}
-                  >
-                    <Link href={`/articles/${article.id}`}>
-                      <ArticleCard
-                        article={article}
-                      />
-                    </Link>
-                  </motion.div>
-                ))}
+            {articles.map((article) => (
+              <motion.div
+                key={article.id}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0 },
+                }}
+              >
+                <Link href={`/articles/${article.id}`}>
+                  <ArticleCard article={article} />
+                </Link>
+              </motion.div>
+            ))}
           </motion.div>
         </motion.div>
       </div>
     </>
   );
 }
-
-const SkeletonCard = () => (
-  <div className="bg-white dark:bg-neutral-900 w-[250px] rounded-xl shadow-md m-4 animate-pulse">
-    <div className="h-[250px] bg-gray-300 dark:bg-gray-700 rounded-t-xl" />
-    <div className="p-5">
-      <div className="pb-5 mb-5 border-b border-gray-200 dark:border-gray-700">
-        <div className="h-6 w-3/4 bg-gray-300 dark:bg-gray-700 rounded mb-2" />
-        <div className="h-4 w-full bg-gray-300 dark:bg-gray-700 rounded" />
-      </div>
-      <div className="flex items-center justify-between">
-        <div className="h-4 w-1/3 bg-gray-300 dark:bg-gray-700 rounded" />
-        <div className="h-4 w-1/4 bg-gray-300 dark:bg-gray-700 rounded" />
-      </div>
-    </div>
-  </div>
-);
