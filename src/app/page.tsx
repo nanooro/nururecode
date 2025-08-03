@@ -1,30 +1,84 @@
 "use client";
-import Image from "next/image";
 import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
-import { useArticleStore } from "@/lib/store";
+import { supabase } from "@/lib/supabaseClient";
 import ArticleCard from "@/components/ui/articleCard";
 import Link from "next/link";
-import Header from "@/components/ui/header";
 import Hero from "@/components/ui/hero";
-import Footer from "@/components/ui/footer";
+
+type Article = {
+  id: number;
+  Heading: string;
+  subHeading: string;
+  imgUrl: string;
+  created_at: string;
+  user_id: string;
+  view_count: number;
+};
 
 export default function Home() {
-  const { setTheme, theme } = useTheme();
-  const articles = useArticleStore((s) => s.articles);
-  const fetchArticles = useArticleStore((s) => s.fetchArticles);
+  const { theme } = useTheme();
+  const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const articlesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const load = async () => {
-      if (articles.length === 0) await fetchArticles();
-      setLoading(false);
+    const fetchArticles = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const { data, error: supabaseError } = await supabase
+          .from("Nannuru_articles_table")
+          .select("*")
+          .order("view_count", { ascending: false })
+          .limit(4);
+
+        if (supabaseError) {
+          console.error("Supabase error fetching articles:", supabaseError);
+          setError(supabaseError.message);
+        } else {
+          setArticles(data || []);
+        }
+      } catch (err: any) {
+        console.error("Error fetching articles:", err);
+        setError(err.message || "An unexpected error occurred.");
+      } finally {
+        setLoading(false);
+      }
     };
-    load();
+
+    fetchArticles();
   }, []);
+
+  const renderContent = () => {
+    if (loading) {
+      return Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />);
+    }
+
+    if (error) {
+      return <p className="text-red-500 text-center col-span-full">Error: {error}</p>;
+    }
+
+    if (articles.length === 0) {
+      return <p className="text-center col-span-full">No articles found.</p>;
+    }
+
+    return articles.map((article) => (
+      <motion.div
+        key={article.id}
+        variants={{
+          hidden: { opacity: 0, y: 20 },
+          visible: { opacity: 1, y: 0 },
+        }}
+      >
+        <Link href={`/articles/${article.id}`}>
+          <ArticleCard article={article} />
+        </Link>
+      </motion.div>
+    ));
+  };
 
   return (
     <>
@@ -48,23 +102,7 @@ export default function Home() {
               },
             }}
           >
-            {loading
-              ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
-              : articles.map((article) => (
-                  <motion.div
-                    key={article.id}
-                    variants={{
-                      hidden: { opacity: 0, y: 20 },
-                      visible: { opacity: 1, y: 0 },
-                    }}
-                  >
-                    <Link href={`/articles/${article.id}`}>
-                      <ArticleCard
-                        article={article}
-                      />
-                    </Link>
-                  </motion.div>
-                ))}
+            {renderContent()}
           </motion.div>
         </motion.div>
       </div>
