@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { redirect } from 'next/navigation';
 import ArticleRead from "@/components/ui/articleRead";
 import { supabase } from "@/lib/supabaseClient";
 
@@ -58,7 +59,7 @@ export default async function Page(props: any) {
     .neq("id", params.id) 
 
   if (!article) {
-    return <div>Article not found</div>;
+    redirect('/articles');
   }
 
   return <ArticleRead id={params.id} more={moreArticles || []} article={article} />;

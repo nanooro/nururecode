@@ -60,21 +60,26 @@ export default function ArticlesList() {
         >
           {loading
             ? Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
-            : articles.map((article) => (
-                <motion.div
-                  key={article.id}
-                  variants={{
-                    hidden: { opacity: 0, y: 20 },
-                    visible: { opacity: 1, y: 0 },
-                  }}
-                >
-                  <Link href={`/articles/${article.id}`}>
-                    <ArticleCard
-                      article={article}
-                    />
-                  </Link>
-                </motion.div>
-              ))}
+            : articles.length === 0
+            ? <p>No articles found.</p>
+            : articles.map((article) => {
+                console.log("Article data:", article); // Log article data
+                return (
+                  <motion.div
+                    key={article.id}
+                    variants={{
+                      hidden: { opacity: 0, y: 20 },
+                      visible: { opacity: 1, y: 0 },
+                    }}
+                  >
+                    <Link href={`/articles/${article.id}`}>
+                      <ArticleCard
+                        article={article}
+                      />
+                    </Link>
+                  </motion.div>
+                );
+              })}
         </motion.div>
 
         <div className="mt-20 text-center bg-muted/40 p-6 rounded-xl">

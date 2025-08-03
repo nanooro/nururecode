@@ -8,7 +8,7 @@ export default function ArticleCard({ article }: { article: any }) {
   return (
     <motion.div
       whileTap={{ scale: 0.95 }}
-      className="group bg-white dark:bg-neutral-900 w-[250px] rounded-xl shadow transition-all duration-300 hover:shadow-2xl dark:hover:shadow-none hover:-translate-y-1 m-4 flex-shrink-0"
+      className="group bg-card dark:bg-neutral-900 w-[250px] rounded-xl shadow transition-all duration-300 hover:shadow-2xl dark:hover:shadow-none hover:-translate-y-1 m-4 flex-shrink-0"
       aria-label="card-overlay-v3"
     >
       <div className="w-full rounded-t-xl h-[250px] flex-shrink-0 relative overflow-hidden">
