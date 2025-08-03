@@ -38,7 +38,6 @@ export const useArticleStore = create<ArticleStore>((set, get) => ({
 
       if (error) {
         console.error("Supabase error fetching articles:", error);
-        throw error;
       }
 
       set({ articles: data || [] });
@@ -50,7 +49,9 @@ export const useArticleStore = create<ArticleStore>((set, get) => ({
   fetchProfiles: async () => {
     try {
       const { data, error } = await supabase.from('profiles').select('*');
-      if (error) throw error;
+      if (error) {
+        console.error("Supabase error fetching profiles:", error);
+      }
       set({ profiles: data || [] });
     } catch (err: any) {
       console.error('❌ Fetching profiles failed:', err.message || err);
