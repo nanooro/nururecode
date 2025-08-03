@@ -33,8 +33,7 @@ export const useArticleStore = create<ArticleStore>((set, get) => ({
     try {
       const { data, error } = await supabase
         .from('Nannuru_articles_table')
-        .select('*')
-        .order('view_count', { ascending: false });
+        .select('*');
 
       if (error) {
         console.error("Supabase error fetching articles:", error);

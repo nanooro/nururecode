@@ -30,7 +30,7 @@ export default function ArticlesList() {
         const { data, error: supabaseError } = await supabase
           .from("Nannuru_articles_table")
           .select("*")
-          .order("view_count", { ascending: false });
+          .order("view_counter", { ascending: false });
 
         if (supabaseError) {
           console.error("Supabase error fetching articles:", supabaseError);

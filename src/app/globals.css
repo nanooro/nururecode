@@ -120,3 +120,12 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Link styling for TipTap content */
+.prose a {
+  color: #3b82f6; /* Blue for unvisited links */
+}
+
+.prose a:visited {
+  color: #9333ea; /* Purple for visited links */
+}

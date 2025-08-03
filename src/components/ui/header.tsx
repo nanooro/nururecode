@@ -4,12 +4,38 @@ import { useTheme } from "next-themes";
 import { Button } from "../../components/ui/button";
 import Menu from "./menu";
 import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
+import { User } from "@supabase/supabase-js";
 
-export default function Header({ setTheme, theme }: { setTheme: (theme: string) => void, theme: string }) {
+export default function Header({
+  setTheme,
+  theme,
+}: {
+  setTheme: (theme: string) => void;
+  theme: string;
+}) {
   const [mounted, setMounted] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     setMounted(true);
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user);
+    };
+    getUser();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
   }, []);
 
   if (!mounted) return null;
@@ -20,7 +46,10 @@ export default function Header({ setTheme, theme }: { setTheme: (theme: string) 
         <div className="h-full flex justify-between items-center z-50 bg-white/60 dark:bg-black/60 backdrop-blur-md shadow-lg dark:shadow-sm dark:shadow-white/10 rounded-lg w-full px-4 sm:px-6">
           <Link href="/">
             <h1 className="font-bold text-3xl sm:text-4xl lg:text-5xl py-4">
-              Nannuru<span className="text-lg text-gray-500 dark:text-gray-400">.com</span>
+              Nannuru
+              <span className="text-lg text-gray-500 dark:text-gray-400">
+                .com
+              </span>
             </h1>
           </Link>
           <div className="flex items-center gap-2">
@@ -61,7 +90,13 @@ export default function Header({ setTheme, theme }: { setTheme: (theme: string) 
                 </svg>
               )}
             </Button>
-            <Menu />
+            {user ? (
+              <Menu />
+            ) : (
+              <Link href="/auth/login">
+                <Button>Sign In</Button>
+              </Link>
+            )}
           </div>
         </div>
       </div>

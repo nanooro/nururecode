@@ -66,7 +66,9 @@ export default function OnboardingPage() {
 
     // Also update user_metadata and display_name for direct access
     const { error: updateUserError } = await supabase.auth.updateUser({
-      data: { full_name: name, display_name: name },
+      data: { full_name: name },
+      // Directly update display_name
+      display_name: name,
     });
 
     if (updateUserError) {

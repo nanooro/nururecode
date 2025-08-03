@@ -32,13 +32,13 @@ export default function Home() {
         const { data, error: supabaseError } = await supabase
           .from("Nannuru_articles_table")
           .select("*")
-          .order("view_count", { ascending: false })
-          .limit(4);
+          .order("view_counter", { ascending: false });
 
         if (supabaseError) {
           console.error("Supabase error fetching articles:", supabaseError);
           setError(supabaseError.message);
         } else {
+          console.log("Fetched articles:", data);
           setArticles(data || []);
         }
       } catch (err: any) {
@@ -66,17 +66,11 @@ export default function Home() {
     }
 
     return articles.map((article) => (
-      <motion.div
-        key={article.id}
-        variants={{
-          hidden: { opacity: 0, y: 20 },
-          visible: { opacity: 1, y: 0 },
-        }}
-      >
+      <div key={article.id}>
         <Link href={`/articles/${article.id}`}>
           <ArticleCard article={article} />
         </Link>
-      </motion.div>
+      </div>
     ));
   };
 
@@ -84,18 +78,11 @@ export default function Home() {
     <>
       <Hero theme={theme || "light"} articlesRef={articlesRef} />
       <div className="p-4 max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.9, ease: "easeInOut" }}
-          ref={articlesRef}
-        >
+        <div ref={articlesRef}>
           <motion.div
             className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-8 justify-items-center"
             initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
+            animate="visible"
             variants={{
               visible: {
                 transition: { staggerChildren: 0.1 },
@@ -104,7 +91,7 @@ export default function Home() {
           >
             {renderContent()}
           </motion.div>
-        </motion.div>
+        </div>
       </div>
     </>
   );
