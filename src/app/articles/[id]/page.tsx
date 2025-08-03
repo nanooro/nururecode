@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import ArticleRead from "@/components/ui/articleRead";
 import { supabase } from "@/lib/supabaseClient";
 

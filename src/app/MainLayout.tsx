@@ -9,7 +9,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header theme={theme} setTheme={setTheme} />
+      <Header theme={theme || "light"} setTheme={setTheme} />
       <main className="flex-grow pt-24">{children}</main>
       <Footer />
     </div>

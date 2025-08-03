@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent, CardHeader } from "@ui/card";
 
-export default function SocialCard({ linkUrl, imgUrl, name }) {
+export default function SocialCard({ linkUrl, imgUrl, name }: { linkUrl: string, imgUrl: string, name: string }) {
   return (
     <>
       <Head>

@@ -5,7 +5,7 @@ export default function Hero({
   articlesRef,
 }: {
   theme: string;
-  articlesRef: React.RefObject<HTMLDivElement>;
+  articlesRef: React.RefObject<HTMLDivElement | null>;
 }) {
   const handleScroll = () => {
     if (articlesRef.current) {

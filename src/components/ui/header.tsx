@@ -5,7 +5,7 @@ import { Button } from "../../components/ui/button";
 import Menu from "./menu";
 import { useEffect, useState } from "react";
 
-export default function Header({ setTheme, theme }) {
+export default function Header({ setTheme, theme }: { setTheme: (theme: string) => void, theme: string }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {

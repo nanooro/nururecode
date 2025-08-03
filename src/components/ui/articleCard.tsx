@@ -4,9 +4,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { User } from "lucide-react";
 
-export default function ArticleCard({
-  article,
-}) {
+export default function ArticleCard({ article }: { article: any }) {
   return (
     <motion.div
       whileTap={{ scale: 0.95 }}

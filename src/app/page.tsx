@@ -30,7 +30,7 @@ export default function Home() {
 
   return (
     <>
-      <Hero theme={theme} articlesRef={articlesRef} />
+      <Hero theme={theme || "light"} articlesRef={articlesRef} />
       <div className="p-4 max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 50 }}

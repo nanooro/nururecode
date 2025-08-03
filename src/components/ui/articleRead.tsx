@@ -73,7 +73,7 @@ export default function ArticleRead({ id, more, article: initialArticle }: { id:
         if (data.user_id) {
           const { data: profileData, error: profileError } = await supabase
             .from('profiles')
-            .select('full_name, avatar_url')
+            .select('id, full_name, avatar_url')
             .eq('id', data.user_id)
             .single();
           if (!profileError && profileData) {
