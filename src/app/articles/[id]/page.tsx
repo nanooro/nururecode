@@ -78,7 +78,7 @@ export default async function Page(props: any) {
 
     await supabase
       .from("Nannuru_articles_table")
-      .update({ view_count: newViewCount })
+      .update({ view_counter: newViewCount })
       .eq("id", articleId);
   };
 

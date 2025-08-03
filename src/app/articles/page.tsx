@@ -13,7 +13,7 @@ type Article = {
   imgUrl: string;
   created_at: string;
   user_id: string;
-  view_count: number;
+  view_counter: number;
 };
 
 export default function ArticlesList() {
