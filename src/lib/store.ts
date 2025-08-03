@@ -36,7 +36,10 @@ export const useArticleStore = create<ArticleStore>((set, get) => ({
         .select('*')
         .order('view_count', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Supabase error fetching articles:", error);
+        throw error;
+      }
 
       set({ articles: data || [] });
     } catch (err: any) {
