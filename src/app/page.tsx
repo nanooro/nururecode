@@ -1,82 +1,91 @@
 "use client";
-
+import Image from "next/image";
 import { useTheme } from "next-themes";
-import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-// import Menu from "@/app/components/ui/menu";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { useArticleStore } from "@/lib/store";
+import ArticleCard from "@/components/ui/articleCard";
 import Link from "next/link";
-// import Hero from "@/app/components/ui/hero"; // make sure this exists or update the path
+import Header from "@/components/ui/header";
+import Hero from "@/components/ui/hero";
+import Footer from "@/components/ui/footer";
 
-function Header() {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
-
-  return (
-    <div className="fixed top-4 left-1/2 -translate-x-1/2 h-auto z-50 w-[95vw]">
-      <div className="flex items-center justify-start h-full px-0 relative">
-        <div className="h-full flex justify-between items-center z-50 bg-white/60 dark:bg-black/60 backdrop-blur-md shadow-lg dark:shadow-sm dark:shadow-white/10 rounded-[2rem] w-full px-4 sm:px-6">
-          <Link href="/">
-            <h1 className="font-bold text-3xl sm:text-4xl lg:text-5xl py-4">
-              Nannuru
-            </h1>
-          </Link>
-          <div className="flex items-center gap-2">
-            <Button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              aria-label="Toggle theme"
-            >
-              {theme === "dark" ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <circle cx="12" cy="12" r="5" strokeWidth="2" />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M12 1v2m0 18v2m11-11h-2M3 12H1m16.364-7.364l-1.414 1.414M6.05 17.95l-1.414 1.414m12.728 0l1.414-1.414M6.05 6.05L4.636 4.636"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
-                  />
-                </svg>
-              )}
-            </Button>
-            {/* <Menu /> */}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+import { useRef } from "react";
 
 export default function Home() {
+  const { setTheme, theme } = useTheme();
+  const articles = useArticleStore((s) => s.articles);
+  const fetchArticles = useArticleStore((s) => s.fetchArticles);
+  const [loading, setLoading] = useState(true);
+  const articlesRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const load = async () => {
+      if (articles.length === 0) await fetchArticles();
+      setLoading(false);
+    };
+    load();
+  }, []);
+
   return (
     <>
-      <Header />
-      {/* <Hero /> */}
+      <Hero theme={theme} articlesRef={articlesRef} />
+      <div className="p-4 max-w-6xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.9, ease: "easeInOut" }}
+          ref={articlesRef}
+        >
+          <motion.div
+            className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-8 justify-items-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={{
+              visible: {
+                transition: { staggerChildren: 0.1 },
+              },
+            }}
+          >
+            {loading
+              ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
+              : articles.map((article) => (
+                  <motion.div
+                    key={article.id}
+                    variants={{
+                      hidden: { opacity: 0, y: 20 },
+                      visible: { opacity: 1, y: 0 },
+                    }}
+                  >
+                    <Link href={`/articles/${article.id}`}>
+                      <ArticleCard
+                        article={article}
+                      />
+                    </Link>
+                  </motion.div>
+                ))}
+          </motion.div>
+        </motion.div>
+      </div>
     </>
   );
 }
+
+const SkeletonCard = () => (
+  <div className="bg-white dark:bg-neutral-900 w-[250px] rounded-xl shadow-md m-4 animate-pulse">
+    <div className="h-[250px] bg-gray-300 dark:bg-gray-700 rounded-t-xl" />
+    <div className="p-5">
+      <div className="pb-5 mb-5 border-b border-gray-200 dark:border-gray-700">
+        <div className="h-6 w-3/4 bg-gray-300 dark:bg-gray-700 rounded mb-2" />
+        <div className="h-4 w-full bg-gray-300 dark:bg-gray-700 rounded" />
+      </div>
+      <div className="flex items-center justify-between">
+        <div className="h-4 w-1/3 bg-gray-300 dark:bg-gray-700 rounded" />
+        <div className="h-4 w-1/4 bg-gray-300 dark:bg-gray-700 rounded" />
+      </div>
+    </div>
+  </div>
+);
